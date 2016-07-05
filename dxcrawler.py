@@ -1,8 +1,10 @@
-
+# -*- coding: utf-8 -*-
 import urllib2
 import lxml.html as HTML
 import pandas
 import requests
+import csv
+import string
 
 #url of websites needed to got
 file_url_num = [226,224,153,218,210]
@@ -44,28 +46,38 @@ for url in file_url_num:
 		htmlSource = HTML.fromstring(content)
 		#get the author
 		singleAuthor = htmlSource.xpath('//p[@class="info"]/span[@class = "author"]/a/text()')
-		totalAuthor.append(singleAuthor)
+		totalAuthor.extend(singleAuthor)
 		#get tags
 		singleTag =  htmlSource.xpath('//div[@class="mod-tag mt50 J-col-tag"]/a/text()')
+		singleTag = ','.join(singleTag)
 		totalTag.append(singleTag)
 		#get time
 		singleTime = htmlSource.xpath('//p[@class="info"]/span[@class = "time"]/text()')
-		totalTime.append(singleTime)
+		totalTime.extend(singleTime)
 		#get topics
 		singleTopic = htmlSource.xpath('//div[@class="pg-article-hd"]/h1/text()')
-		totalTopic.append(singleTopic)
+		totalTopic.extend(singleTopic)
 		#get contents
 		singleContent = htmlSource.xpath('//div[@class="editor-body"]/p/text()|//div[@class="editor-body"]/div/text()|//div[@class="editor-body"]/p/font/font/text()')
+		singleContent = '\n'.join(singleContent)
 		totalContent.append(singleContent)
+		
+
+			
 
 #matrix transpose
 item_ = [totalTopic,totalTime,totalAuthor,totalTag,totalContent]
 item_ = map(list,zip(*item_))
 	
 #output csv files
-
 paper = pandas.DataFrame(item_)
 paper.to_csv("dxy.csv",encoding = 'GB18030',header = False,index = False,mode = 'a')
+
+# csvfile = file('dxy.csv','wb')
+# writer = csv.writer(csvfile)
+# for row in item_:
+# 	writer.writerow(row)
+# csvfile.close()
 
 
 
