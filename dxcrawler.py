@@ -68,16 +68,12 @@ for url in file_url_num:
 #matrix transpose
 item_ = [totalTopic,totalTime,totalAuthor,totalTag,totalContent]
 item_ = map(list,zip(*item_))
+
 	
 #output csv files
 paper = pandas.DataFrame(item_)
 paper.to_csv("dxy.csv",encoding = 'GB18030',header = False,index = False,mode = 'a')
 
-# csvfile = file('dxy.csv','wb')
-# writer = csv.writer(csvfile)
-# for row in item_:
-# 	writer.writerow(row)
-# csvfile.close()
 
 
 
